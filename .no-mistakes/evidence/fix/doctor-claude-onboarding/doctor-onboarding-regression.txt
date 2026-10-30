@@ -1,0 +1,6 @@
+REGRESSION PROOF: S1 (secondmate-harness = 'codex' then 'claude')
+================================================================
+PRE-FIX  (8e2440f2): check claude-onboarding=human: Claude Code's first-run onboarding is not complete on this host, so a launch stalls on the theme picker before it reads its instructions
+
+PRE-FIX gates claude-onboarding as human: on a codex home -> spurious block (the reported bug).
+POST-FIX (8720facd): skip: ... its configured harness is not claude (see doctor-onboarding-scenarios.txt S1).
