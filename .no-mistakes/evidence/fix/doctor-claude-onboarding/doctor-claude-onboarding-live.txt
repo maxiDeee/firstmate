@@ -1,0 +1,18 @@
+# Live run of bin/fm-remote-doctor.sh (real binary, disposable HOME/FM_HOME)
+# host tools: herdr/tasks-axi/treehouse absent -> many unrelated gaps expected;
+#             the claude-onboarding check is what this change adds.
+
+## Scenario: pinned account (spaced path) is NOT onboarded while default HOME is (--fix)
+## pin file config/claude-account -> /tmp/claude-501/fm-doctor-ev2.zv9YvZ/Claude Accounts/work
+check claude-onboarding=human: Claude Code's first-run onboarding is not complete for the account selected by config/claude-account (/tmp/claude-501/fm-doctor-ev2.zv9YvZ/Claude Accounts/work), so a launch stalls on the theme picker before it reads its instructions
+action: claude-onboarding: run CLAUDE_CONFIG_DIR='/tmp/claude-501/fm-doctor-ev2.zv9YvZ/Claude Accounts/work' claude once interactively on that account and finish the first-run onboarding; Firstmate never answers onboarding for you
+error: this host is not ready for a remote second mate; unresolved: herdr remote-job-worker remote-job-worker-loaded remote-job-probe launchagent launchagent-loaded herdr-server claude-onboarding
+
+## Side-effect check: --fix must NOT rewrite the pin or the account store
+pin unchanged: OK
+selected .claude.json unchanged: OK
+
+## Scenario: config/claude-account names a missing directory (read-only run)
+check claude-onboarding=human: the Claude account pinned by config/claude-account cannot be resolved, so a launch would refuse before onboarding: config/claude-account must name a readable, searchable existing directory (ordinary means ~/.claude with CLAUDE_CONFIG_DIR unset): /tmp/claude-501/fm-doctor-ev2.zv9YvZ/fmhome2/config/claude-account -> /tmp/claude-501/fm-doctor-ev2.zv9YvZ/does-not-exist
+action: claude-onboarding: fix config/claude-account in this home so it names 'ordinary' or a readable, signed-in account directory, then rerun this command
+error: this host is not ready for a remote second mate; unresolved: herdr remote-job-worker remote-job-worker-loaded remote-job-probe launchagent launchagent-loaded herdr-server claude-onboarding
