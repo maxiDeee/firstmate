@@ -1,10 +1,20 @@
-SCENARIO RESULTS (current/fixed doctor)
-=======================================
-S1 codex-then-claude (regression) | skip: claude is installed, but this home pins no Claude account and its configured harness is not claude, so its first-run onboarding does not gate this host
-S2 default-claude incomplete     | human: Claude Code's first-run onboarding is not complete on this host, so a launch stalls on the theme picker before it reads its instructions
-S2b default-claude complete      | ok: Claude Code first-run onboarding is complete
-S3 mate-override claude          | human: Claude Code's first-run onboarding is not complete on this host, so a launch stalls on the theme picker before it reads its instructions
-S4 crew-harness claude           | human: Claude Code's first-run onboarding is not complete on this host, so a launch stalls on the theme picker before it reads its instructions
-S5 non-claude harness only       | skip: claude is installed, but this home pins no Claude account and its configured harness is not claude, so its first-run onboarding does not gate this host
-S6 claude-first then codex       | human: Claude Code's first-run onboarding is not complete on this host, so a launch stalls on the theme picker before it reads its instructions
-S7 comments then codex then claude | skip: claude is installed, but this home pins no Claude account and its configured harness is not claude, so its first-run onboarding does not gate this host
+=== tests/fm-remote-doctor.test.sh — Claude onboarding + --harness cases (real doctor driven end-to-end) ===
+ok - omp alone satisfies the remote harness requirement
+ok - a completed Claude Code onboarding is recognized as ready
+ok - incomplete Claude onboarding is a human gap --fix never answers
+ok - a missing Claude onboarding record is a human gap the doctor never creates
+ok - a passed claude harness gates onboarding even when the remote home config is empty
+ok - claude onboarding does not apply when claude is not installed
+ok - a passed non-claude harness skips claude onboarding and ignores the remote home crew-harness
+ok - no passed harness and no pin skips claude onboarding and leaves it to the spawn-time check
+ok - the passed claude harness gates onboarding even when the remote home crew-harness is codex
+ok - the doctor checks the account config/claude-account selects, not the default store
+ok - an un-onboarded selected account is a human gap even when the default account is onboarded and a non-claude harness is passed
+ok - a config/claude-account pin that cannot be resolved is a human gap, not a silent default-store check
+ok - a pin naming the ordinary account reads $HOME/.claude.json, not an exported CLAUDE_CONFIG_DIR
+ok - an un-onboarded pinned-ordinary account sheds CLAUDE_CONFIG_DIR in its operator command
+ok - with no pin the default-store path still honors CLAUDE_CONFIG_DIR unchanged
+ok - the argument parser rejects a valueless --harness and unknown arguments with the usage exit code
+ok - the readiness library forwards the passed harness on every doctor call and none when omitted
+
+full result: EXIT=0, 38 ok / 0 not ok
